@@ -78,19 +78,19 @@ if __name__ == "__main__":
 	
 	# γ值设定为0.04，即一般病程25天
 	# 用最小二乘法估计β值和初始易感人数
-	gamma = 0.04
-	S0 = [i for i in range(20000, 40000, 1000)]
-	beta = [f for f in np.arange(1e-7, 1e-4, 1e-7)]
-	
-	# 定义偏差函数
-	def error(res):
-		err = (data["感染者"] - res)**2
-		errsum = sum(err)
-		return errsum
-		
+#	gamma = 0.04
+#	S0 = [i for i in range(20000, 40000, 1000)]
+#	beta = [f for f in np.arange(1e-7, 1e-4, 1e-7)]
+#	
+#	# 定义偏差函数
+#	def error(res):
+#		err = (data["感染者"] - res)**2
+#		errsum = sum(err)
+#		return errsum
+#		
 	# 穷举法，找出与实际数据差的平方和最小的S0和beta值
-	# 结果 S0 = 39000, β = 8e-6
-	#minSum = 1e10
+#	# 结果 S0 = 39000, β = 8e-6
+#	minSum = 1e10
 #	minS0 = 0.0
 #	minBeta = 0.0
 #	bestRes = None
