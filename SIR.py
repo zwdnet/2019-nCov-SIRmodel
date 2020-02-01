@@ -78,44 +78,47 @@ if __name__ == "__main__":
 	
 	# γ值设定为0.04，即一般病程25天
 	# 用最小二乘法估计β值和初始易感人数
-#	gamma = 0.04
-#	S0 = [i for i in range(20000, 40000, 1000)]
-#	beta = [f for f in np.arange(1e-7, 1e-4, 1e-7)]
-#	
-#	# 定义偏差函数
-#	def error(res):
-#		err = (data["感染者"] - res)**2
-#		errsum = sum(err)
-#		return errsum
-#		
-	# 穷举法，找出与实际数据差的平方和最小的S0和beta值
-#	# 结果 S0 = 39000, β = 8e-6
-#	minSum = 1e10
-#	minS0 = 0.0
-#	minBeta = 0.0
-#	bestRes = None
-#	for S in S0:
-#		for b in beta:
-#			# 模型的差分方程
-#			def diff_eqs_2(INP, t):
-#				Y = np.zeros((3))
-#				V = INP
-#				Y[0] = -b * V[0] * V[1]
-#				Y[1] = b * V[0] * V[1] - gamma * V[1]
-#				Y[2] = gamma * V[1]
-#				return Y
-#			# 数值解模型方程
-#			INPUT = [S, I0, 0.0]
-#			RES = spi.odeint(diff_eqs_2, INPUT, t_range)
-#			errsum = error(RES[:21, 1])
-#			if errsum < minSum:
-#				minSum = errsum
-#				minS0 = S
-#				minBeta = b
-#				bestRes = RES
-#				print("S0=%d beta=%f minErr=%f" % (S, b, errsum))
-#				
-#	print("S0 = %d β = %f" % (minS0, minBeta))
+	gamma = 0.04
+	S0 = [i for i in range(1500, 30000, 100)]
+	
+	# 定义偏差函数
+	def error(res):
+		err = (data["感染者"] - res)**2
+		errsum = sum(err)
+		return errsum
+		
+	# 穷举法，找出最佳拟合的S0值和β值
+	minSum = 1e10
+	minS0 = 0.0
+	minBeta = 0.0
+	bestRes = None
+	for S in S0:
+		# 根据微分方程计算β值
+		S1 = S + data["感染者"][0] - data["感染者"][1] - data["治愈"][1]
+		beta = (S - S1)/(S * data["感染者"][0])
+		print(S, S1)
+		# 模型的差分方程
+		def diff_eqs_2(INP, t):
+			Y = np.zeros((3))
+			V = INP
+			Y[0] = -beta * V[0] * V[1]
+			Y[1] = beta * V[0] * V[1] - gamma * V[1]
+			Y[2] = gamma * V[1]
+			return Y
+		
+		# 数值解模型方程
+		INPUT = [S, I0, 0.0]
+		RES = spi.odeint(diff_eqs_2, INPUT, t_range)
+		errsum = error(RES[:21, 1])
+		print("S0=%d beta=%f minErr=%f" % (S, beta, errsum))
+		if errsum < minSum:
+			minSum = errsum
+			minS0 = S
+			minBeta = beta
+			bestRes = RES
+			# print("S0=%d beta=%f minErr=%f" % (S, beta, errsum))
+				
+	print("S0 = %d β = %f" % (minS0, minBeta))
 			
 	print("预测最大感染人数:%d 位置:%d" % (RES[:,1].max(), np.argmax(RES[:, 1])))
 	# 将预测值与真实值画到一起
