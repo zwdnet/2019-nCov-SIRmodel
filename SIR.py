@@ -52,14 +52,17 @@ if __name__ == "__main__":
 	
 	# 读取数据
 	data = pd.read_csv("data.csv", index_col = ["date"])
+	data["现有感染者"] = data["感染者"] - data["死亡"] - data["治愈"]
 	print(data)
+	
 	# 数据作图
 	fig = pl.figure()
 	pl.subplot(111)
-	pl.plot(data["感染者"], "-r", label = "infected")
+	pl.plot(data["现有感染者"], "-r", label = "infected")
 	pl.plot(data["疑似者"], "-g", label = "undecided")
 	pl.plot(data["死亡"], "-b", label = "death")
 	pl.plot(data["治愈"], "-k", label = "healed")
+	pl.plot(data["现有感染者"]-data["现有感染者"].shift(1), "-y", label = "increase")
 	pl.legend(loc = 0)
 	pl.title("real data")
 	pl.xlabel("Time")
@@ -122,7 +125,8 @@ if __name__ == "__main__":
 	fig = pl.figure()
 	pl.subplot(111)
 	pl.plot(RES[:, 1], "-r", label = "Infectious")
-	pl.plot(data["感染者"], "o", label = "realdata")
+	pl.plot(data["现有感染者"], "o", label = "realdata")
+	pl.plot(data["现有感染者"]-data["现有感染者"].shift(1), "-y", label = "increase")
 	pl.legend(loc = 0)
 	pl.title("SIR model")
 	pl.xlabel("Time")
