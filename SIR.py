@@ -68,8 +68,8 @@ if __name__ == "__main__":
 	pl.xlabel("Time")
 	pl.ylabel("Infectious Susceptibles")
 	pl.savefig("realdata.png")
-	# 计算β值，用确诊病例除以密切接触者人数
-	#gammaguess = (data["治愈"]+data["死亡"])/data["感染者"]
+	 #计算β值，用确诊病例除以密切接触者人数
+#	gammaguess = (data["治愈"]+data["死亡"])/data["感染者"]
 #	print(gammaguess)
 #	gamma = gammaguess[-7:-1].mean()
 #	print(gamma)
@@ -78,20 +78,20 @@ if __name__ == "__main__":
 #	fig = pl.figure()
 #	pl.plot(gammaguess)
 #	pl.savefig("gama.png")
-	
-	# γ值设定为0.04，即一般病程25天
-	# 用最小二乘法估计β值和初始易感人数
+#	
+#	 #γ值设定为0.04，即一般病程25天
+#	 #用最小二乘法估计β值和初始易感人数
 #	gamma = 0.04
 #	S0 = [i for i in range(20000, 40000, 1000)]
 #	beta = [f for f in np.arange(1e-7, 1e-4, 1e-7)]
 #	
 #	# 定义偏差函数
 #	def error(res):
-#		err = (data["感染者"] - res)**2
+#		err = (data["感染者"].iloc[:21] - res)**2
 #		errsum = sum(err)
 #		return errsum
 #		
-	# 穷举法，找出与实际数据差的平方和最小的S0和beta值
+#	 #穷举法，找出与实际数据差的平方和最小的S0和beta值
 #	# 结果 S0 = 39000, β = 8e-6
 #	minSum = 1e10
 #	minS0 = 0.0
