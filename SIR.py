@@ -12,7 +12,7 @@ import pandas as pd
 beta = 8e-6
 gamma = 0.04
 TS = 1.0
-ND = 60.0
+ND = 100.0
 S0 = 39000
 I0 = 41
 INPUT = [S0, I0, 0.0]
