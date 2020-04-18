@@ -132,5 +132,17 @@ if __name__ == "__main__":
 	pl.xlabel("Time")
 	pl.ylabel("Infectious Susceptibles")
 	pl.savefig("test.png")
+	
+	# 疫情缓解后的数据作图
+	# 数据作图
+	data = data.iloc[51:, :]
+	fig = pl.figure()
+	pl.subplot(111)
+	pl.plot(data["感染者"]-data["感染者"].shift(1), "-y", label = "increase")
+	pl.legend(loc = 0)
+	pl.title("increse")
+	pl.xlabel("Time")
+	pl.ylabel("increase cases")
+	pl.savefig("realdata_last.png")
 		
 	
